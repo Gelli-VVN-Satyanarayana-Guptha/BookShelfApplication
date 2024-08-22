@@ -13,7 +13,7 @@ class AuthRepositoryImpl @Inject constructor (
     }
 
     override fun getLoggedInStatus(): Boolean {
-        return sharedPreferences.getBoolean("isLoggedIn", true)
+        return sharedPreferences.getBoolean("isLoggedIn", false)
     }
 
 }
