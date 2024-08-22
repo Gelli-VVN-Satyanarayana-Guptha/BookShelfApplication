@@ -16,4 +16,21 @@ class AuthRepositoryImpl @Inject constructor (
         return sharedPreferences.getBoolean("isLoggedIn", false)
     }
 
+    override fun login(email: String, password: String): Boolean {
+        val savedEmail = sharedPreferences.getString("email", null)
+        val savedPassword = sharedPreferences.getString("password", null)
+        if (savedEmail == email && savedPassword == password) {
+            setLoggedInStatus(true)
+            return true
+        }
+        return false
+    }
+
+    override fun signUp(email: String, password: String, country: String) {
+        sharedPreferences.edit().putString("email", email).apply()
+        sharedPreferences.edit().putString("password", password).apply()
+        sharedPreferences.edit().putString("country", country).apply()
+    }
+
+
 }

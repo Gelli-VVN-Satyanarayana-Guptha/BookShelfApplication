@@ -6,4 +6,8 @@ interface AuthRepository {
 
     fun getLoggedInStatus(): Boolean
 
+    fun login(email: String, password: String): Boolean
+
+    fun signUp(email: String, password: String, country: String)
+
 }

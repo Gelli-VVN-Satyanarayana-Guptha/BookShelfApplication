@@ -3,6 +3,7 @@ package com.example.bookshelf.presentation.screens.setup
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,6 +49,7 @@ fun LoginScreen (
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
 
     MaterialTheme {
         Scaffold { paddingValues ->
@@ -64,7 +66,7 @@ fun LoginScreen (
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(64.dp))
                 OutlinedTextField (
                     value = email,
                     onValueChange = { email = it },
@@ -80,7 +82,7 @@ fun LoginScreen (
                         )
                     }
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 OutlinedTextField (
                     value = password,
                     onValueChange = { password = it },
@@ -104,17 +106,29 @@ fun LoginScreen (
                     },
                     visualTransformation = if (!isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None
                 )
-
+                Spacer(modifier = Modifier.height(16.dp))
+                if (isError) {
+                    Text (
+                        text = "This Email or Password is incorrect",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                Spacer(modifier = Modifier.height(32.dp))
                 Button (
-                    modifier = Modifier.width(150.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
                     onClick = {
-                        // viewModel.login(email, password)
+                        if(viewModel.login(email, password)) {
+                            navController.navigate("guide")
+                        } else {
+                            isError = true
+                        }
                     },
                     shape = RoundedCornerShape(10),
                 ) {
                     Text(
                         text = "Login",
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineSmall
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
@@ -140,5 +154,4 @@ fun LoginScreen (
             }
         }
     }
-
 }

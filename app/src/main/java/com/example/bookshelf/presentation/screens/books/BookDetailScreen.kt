@@ -213,7 +213,9 @@ fun BookDetailScreen (
                             showAddTagDialog = false
                         },
                         addTag = { tag ->
-                            viewModel.addTagToBook(tag)
+                            if (tag.isNotEmpty()) {
+                                viewModel.addTagToBook(tag)
+                            }
                         }
                     )
                 }

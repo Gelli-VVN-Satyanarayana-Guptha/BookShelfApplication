@@ -11,6 +11,7 @@ import com.example.bookshelf.data.local.books.entity.BookEntity
 import com.example.bookshelf.data.local.setup.AuthRepositoryImpl
 import com.example.bookshelf.data.remote.books.BookRemoteMediator
 import com.example.bookshelf.data.remote.books.BooksApi
+import com.example.bookshelf.data.remote.setup.CountryApi
 import com.example.bookshelf.domain.repository.AuthRepository
 import com.example.bookshelf.domain.repository.BooksRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -66,6 +67,25 @@ object AppModule {
             .addConverterFactory(kotlinxSerializationFactory)
             .build()
             .create(BooksApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCountryApi(
+        @KotlinxSerializationFactory kotlinxSerializationFactory: Converter.Factory
+    ) : CountryApi {
+        val client: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(Interceptor { chain ->
+                val newRequest: Request = chain.request().newBuilder().build()
+                chain.proceed(newRequest)
+            }).build()
+
+        return Retrofit.Builder()
+            .client(client)
+            .baseUrl(CountryApi.BASE_URL)
+            .addConverterFactory(kotlinxSerializationFactory)
+            .build()
+            .create(CountryApi::class.java)
     }
 
     @Provides
